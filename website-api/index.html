@@ -1,0 +1,12 @@
+else if(body.type === "deleteUser") {
+    console.log(body.params);
+    const delUsers = await User.findByIdAndRemove(body.params);
+    
+    ws.clients.forEach(async function e(client) {
+        if (client != socket) {
+            const fetchUsers = await User.find();
+            const delUsers = JSON.stringify({allUsers: fetchUsers});
+            client.send(delUsers);
+        }
+    });
+}
